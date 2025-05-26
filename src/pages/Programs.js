@@ -3,7 +3,8 @@ import { Box, Typography, Container, Grid, Card, CardContent, Chip, Button } fro
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Schedule, EmojiEvents, Groups, School } from '@mui/icons-material';
-import { useLanguage } from '../../hooks/useLanguage';
+import { useLanguage } from '../hooks/useLanguage';
+import BackButton from '../components/common/BackButton';
 
 const Programs = () => {
   const { t } = useLanguage();
@@ -90,59 +91,102 @@ const Programs = () => {
     "2025' 대한중고펜싱연맹 대회 개인전 3위",
   ];
 
+  const classInfo = [
+    "남녀 중등부 선수반 운영",
+    "남녀 초등부 선수반 모집중",
+    "초/중/고/성인/동호인 취미반 상시 모집",
+    "개인 레슨 예약 가능"
+  ];
+
   const handleContactClick = () => {
     window.open('tel:02-2088-5358', '_self');
   };
 
   return (
-    <Box
-      id="programs"
-      ref={ref}
-      sx={{
-        py: { xs: 8, md: 12 },
-        bgcolor: 'white',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      <Container maxWidth="lg">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-        >
-          <motion.div variants={itemVariants}>
-            <Box sx={{ textAlign: 'center', mb: 8 }}>
-              <Typography
-                variant="h2"
-                sx={{
-                  fontSize: { xs: '2rem', md: '3rem' },
-                  fontWeight: 700,
-                  mb: 2,
-                  color: '#1a1a1a',
-                }}
-              >
-                {t('programsTitle')}
-              </Typography>
-              <Typography
-                variant="h5"
-                sx={{
-                  fontSize: { xs: '1.1rem', md: '1.3rem' },
-                  color: '#666666',
-                  maxWidth: 600,
-                  mx: 'auto',
-                  lineHeight: 1.6,
-                }}
-              >
-                연령과 목적에 맞는 다양한 프로그램을 제공합니다
-              </Typography>
+    <Box>
+      <BackButton />
+      
+      {/* Hero Section */}
+      <Box
+        ref={ref}
+        sx={{
+          minHeight: '70vh',
+          display: 'flex',
+          alignItems: 'center',
+          position: 'relative',
+          background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 100%)',
+          color: 'white',
+          overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: 'url("/images/programs/class-training.jpg")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.3,
+            zIndex: 1,
+          },
+        }}
+      >
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+          >
+            <Box sx={{ maxWidth: 800, textAlign: 'center', mx: 'auto' }}>
+              <motion.div variants={itemVariants}>
+                <Typography
+                  variant="h1"
+                  sx={{
+                    fontSize: { xs: '2.5rem', md: '4rem' },
+                    fontWeight: 700,
+                    mb: 2,
+                    background: 'linear-gradient(135deg, #ffffff 0%, #cccccc 100%)',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  {t('programsTitle')}
+                </Typography>
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontSize: { xs: '1.1rem', md: '1.3rem' },
+                    fontWeight: 400,
+                    mb: 4,
+                    color: '#cccccc',
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {t('programsSubtitle')}
+                </Typography>
+              </motion.div>
             </Box>
           </motion.div>
+        </Container>
+      </Box>
 
+      {/* Programs Section */}
+      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: 'white' }}>
+        <Container maxWidth="lg">
           <Grid container spacing={4} sx={{ mb: 8 }}>
             {programs.map((program, index) => (
               <Grid item xs={12} md={4} key={index}>
-                <motion.div variants={itemVariants}>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
                   <Card
                     sx={{
                       height: '100%',
@@ -237,37 +281,64 @@ const Programs = () => {
               </Grid>
             ))}
           </Grid>
+        </Container>
+      </Box>
 
-          <motion.div variants={itemVariants}>
-            <Box
-              sx={{
-                p: 6,
-                bgcolor: '#1a1a1a',
-                borderRadius: 3,
-                color: 'white',
-                textAlign: 'center',
-                mb: 6,
-              }}
-            >
+      {/* Results Section */}
+      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#1a1a1a', color: 'white' }}>
+        <Container maxWidth="lg">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <Box sx={{ textAlign: 'center', mb: 6 }}>
               <Typography
-                variant="h4"
+                variant="h2"
                 sx={{
+                  fontSize: { xs: '2rem', md: '3rem' },
                   fontWeight: 700,
-                  mb: 3,
-                  fontSize: { xs: '1.8rem', md: '2.2rem' },
+                  mb: 2,
                 }}
               >
-                선수반 실적
+                {t('athleteResults')}
               </Typography>
-              <Grid container spacing={2} sx={{ mb: 4 }}>
-                {achievements.map((achievement, index) => (
-                  <Grid item xs={12} sm={6} key={index}>
+              <Typography
+                variant="h5"
+                sx={{
+                  fontSize: { xs: '1.1rem', md: '1.3rem' },
+                  color: '#cccccc',
+                  maxWidth: 600,
+                  mx: 'auto',
+                  lineHeight: 1.6,
+                }}
+              >
+                스타펜싱 아카데미 선수반의 뛰어난 성과를 확인해보세요
+              </Typography>
+            </Box>
+
+            <Grid container spacing={3} sx={{ mb: 6 }}>
+              {achievements.map((achievement, index) => (
+                <Grid item xs={12} sm={6} key={index}>
+                  <motion.div
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                  >
                     <Box
                       sx={{
-                        p: 2,
+                        p: 3,
                         bgcolor: 'rgba(255,255,255,0.1)',
                         borderRadius: 2,
                         backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          bgcolor: 'rgba(255,255,255,0.15)',
+                          transform: 'translateY(-2px)',
+                        },
                       }}
                     >
                       <Typography
@@ -275,49 +346,94 @@ const Programs = () => {
                         sx={{
                           fontWeight: 500,
                           lineHeight: 1.6,
+                          display: 'flex',
+                          alignItems: 'center',
                         }}
                       >
-                        🏆 {achievement}
+                        <Box component="span" sx={{ mr: 2, fontSize: '1.5rem' }}>🏆</Box>
+                        {achievement}
                       </Typography>
                     </Box>
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
+                  </motion.div>
+                </Grid>
+              ))}
+            </Grid>
           </motion.div>
+        </Container>
+      </Box>
 
-          <motion.div variants={itemVariants}>
+      {/* Class Information Section */}
+      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#f8f9fa' }}>
+        <Container maxWidth="lg">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
             <Box
               sx={{
-                p: 4,
-                bgcolor: '#f8f9fa',
+                p: 6,
+                bgcolor: 'white',
                 borderRadius: 3,
+                boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
                 textAlign: 'center',
               }}
             >
               <Typography
-                variant="h5"
+                variant="h3"
                 sx={{
                   fontWeight: 600,
-                  mb: 2,
+                  mb: 4,
                   color: '#1a1a1a',
+                  fontSize: { xs: '1.8rem', md: '2.2rem' },
                 }}
               >
-                수강 안내
+                {t('classInfo')}
               </Typography>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: '#666666',
-                  mb: 3,
-                  lineHeight: 1.7,
-                }}
-              >
-                • 남녀 중등부 선수반 운영<br/>
-                • 남녀 초등부 선수반 모집중<br/>
-                • 초/중/고/성인/동호인 취미반 상시 모집<br/>
-                • 개인 레슨 예약 가능
-              </Typography>
+              
+              <Grid container spacing={3} sx={{ mb: 4 }}>
+                {classInfo.map((info, index) => (
+                  <Grid item xs={12} sm={6} key={index}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                    >
+                      <Box
+                        sx={{
+                          p: 3,
+                          bgcolor: '#f8f9fa',
+                          borderRadius: 2,
+                          border: '2px solid #e0e0e0',
+                          transition: 'all 0.3s ease',
+                          '&:hover': {
+                            borderColor: '#1a1a1a',
+                            transform: 'translateY(-2px)',
+                          },
+                        }}
+                      >
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            color: '#1a1a1a',
+                            fontWeight: 500,
+                            lineHeight: 1.6,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <Box component="span" sx={{ mr: 2, fontSize: '1.2rem' }}>✓</Box>
+                          {info}
+                        </Typography>
+                      </Box>
+                    </motion.div>
+                  </Grid>
+                ))}
+              </Grid>
+
               <Button
                 variant="contained"
                 size="large"
@@ -326,23 +442,25 @@ const Programs = () => {
                   bgcolor: '#1a1a1a',
                   color: 'white',
                   py: 2,
-                  px: 4,
-                  fontSize: '1.1rem',
+                  px: 6,
+                  fontSize: '1.2rem',
                   fontWeight: 600,
                   borderRadius: '50px',
+                  boxShadow: '0 8px 32px rgba(26,26,26,0.3)',
                   '&:hover': {
                     bgcolor: '#333333',
                     transform: 'translateY(-2px)',
+                    boxShadow: '0 12px 40px rgba(26,26,26,0.4)',
                   },
                   transition: 'all 0.3s ease',
                 }}
               >
-                수업 문의하기
+                {t('contactUs')}
               </Button>
             </Box>
           </motion.div>
-        </motion.div>
-      </Container>
+        </Container>
+      </Box>
     </Box>
   );
 };

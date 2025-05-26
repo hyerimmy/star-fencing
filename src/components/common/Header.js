@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   AppBar, 
   Toolbar, 
@@ -25,13 +26,15 @@ const Header = () => {
   const { t } = useLanguage();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
-    { key: 'home', href: '#home' },
-    { key: 'about', href: '#about' },
-    { key: 'fencing', href: '#fencing' },
-    { key: 'instructors', href: '#instructors' },
-    { key: 'programs', href: '#programs' },
+    { key: 'home', path: '/' },
+    { key: 'about', path: '/about' },
+    { key: 'fencing', path: '/fencing' },
+    { key: 'instructors', path: '/instructors' },
+    { key: 'programs', path: '/programs' },
   ];
 
   useEffect(() => {
@@ -46,11 +49,8 @@ const Header = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const scrollToSection = (href) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleNavigation = (path) => {
+    navigate(path);
     setMobileOpen(false);
   };
 
@@ -67,7 +67,10 @@ const Header = () => {
       <List>
         {menuItems.map((item) => (
           <ListItem key={item.key} disablePadding>
-            <ListItemButton onClick={() => scrollToSection(item.href)}>
+            <ListItemButton 
+              onClick={() => handleNavigation(item.path)}
+              selected={location.pathname === item.path}
+            >
               <ListItemText primary={t(item.key)} />
             </ListItemButton>
           </ListItem>
@@ -98,7 +101,7 @@ const Header = () => {
             transition={{ duration: 0.5 }}
             style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => scrollToSection('#home')}>
+            <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => handleNavigation('/')}>
               <img 
                 src="/images/logo/star-fencing-logo.png" 
                 alt="Star Fencing Academy" 
@@ -130,12 +133,15 @@ const Header = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <Button
-                    onClick={() => scrollToSection(item.href)}
+                    onClick={() => handleNavigation(item.path)}
                     sx={{
                       color: isScrolled ? 'black' : 'white',
-                      fontWeight: 500,
+                      fontWeight: location.pathname === item.path ? 700 : 500,
                       fontSize: '0.95rem',
                       mx: 0.5,
+                      borderBottom: location.pathname === item.path ? '2px solid' : 'none',
+                      borderColor: isScrolled ? 'black' : 'white',
+                      borderRadius: 0,
                       '&:hover': {
                         bgcolor: 'rgba(0,0,0,0.1)',
                       },
